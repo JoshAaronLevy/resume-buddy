@@ -109,11 +109,40 @@ export const useAnalysisStore = create<AnalysisStore>((set, get) => ({
   closeModal: () => set({ isModalOpen: false }),
 
   simulateAnalyze: async () => {
-    // TODO: Implement in Milestone 2
+    const { uploadedFile, allowedSections, toastRef } = get();
+    
+    if (!uploadedFile) return;
+
     set({ isAnalyzing: true });
-    // Placeholder for mock analysis
+
+    // Simulate network delay
     await new Promise((resolve) => setTimeout(resolve, 700));
-    set({ isAnalyzing: false });
+
+    // Import mock data
+    const { analysisMock } = await import('../utils/analysisMock');
+
+    // Get selected sections
+    const sectionsConsidered = Object.entries(allowedSections)
+      .filter(([, selected]) => selected)
+      .map(([name]) => name as SectionName);
+
+    // Clone and customize mock analysis
+    const analysis = {
+      ...analysisMock,
+      sectionsConsidered,
+      sourceFilename: uploadedFile.name,
+      createdAtISO: new Date().toISOString(),
+    };
+
+    set({ analysis, isAnalyzing: false });
+
+    // Show success notification
+    toastRef?.current?.show({
+      severity: 'success',
+      summary: 'Analysis Complete!',
+      detail: "Click 'View Analysis' to see results.",
+      life: 3000,
+    });
   },
 
   saveToLocalStorage: () => {
