@@ -1,10 +1,14 @@
 import { create } from 'zustand';
+import type { Toast } from 'primereact/toast';
 import type { AnalysisResult, SectionName, SavedAnalysis } from '../types';
 
 interface AnalysisStore {
   // -------------------
   // STATE
   // -------------------
+
+  /** Toast reference for global notifications */
+  toastRef: React.RefObject<Toast | null> | null;
 
   /** Currently uploaded file (null if none) */
   uploadedFile: File | null;
@@ -58,12 +62,16 @@ interface AnalysisStore {
   /** Set the "proceed without sections" acknowledgment */
   setProceedWithoutSections: (value: boolean) => void;
 
+  /** Set the toast ref for global notifications */
+  setToastRef: (ref: React.RefObject<Toast | null>) => void;
+
   /** Reset state (for future "New Analysis" feature) */
   reset: () => void;
 }
 
 export const useAnalysisStore = create<AnalysisStore>((set, get) => ({
   // Initial state
+  toastRef: null,
   uploadedFile: null,
   allowedSections: {
     summary: false,
@@ -134,6 +142,8 @@ export const useAnalysisStore = create<AnalysisStore>((set, get) => ({
   },
 
   setProceedWithoutSections: (value) => set({ proceedWithoutSections: value }),
+
+  setToastRef: (ref) => set({ toastRef: ref }),
 
   reset: () =>
     set({
