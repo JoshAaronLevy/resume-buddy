@@ -102,19 +102,26 @@ export default function ActionsSidebar() {
         />
 
         {/* Status Block */}
-        <Card className="mt-3">
+        <Card className="mt-3" role="status" aria-live="polite">
           {isAnalyzing ? (
             <div className="flex align-items-center gap-2">
-              <ProgressSpinner style={{ width: '24px', height: '24px' }} strokeWidth="4" />
+              <ProgressSpinner 
+                style={{ width: '24px', height: '24px' }} 
+                strokeWidth="4"
+                aria-label="Analyzing resume"
+              />
               <span className="text-sm">Analyzing...</span>
             </div>
           ) : analysis ? (
             <p className="text-sm text-green-600 m-0">
-              <i className="pi pi-check-circle mr-2"></i>
+              <i className="pi pi-check-circle mr-2" aria-hidden="true"></i>
               Analysis ready
             </p>
           ) : (
-            <p className="text-sm text-color-secondary m-0">No analysis yet</p>
+            <p className="text-sm text-color-secondary m-0">
+              <i className="pi pi-info-circle mr-2" aria-hidden="true"></i>
+              No analysis yet
+            </p>
           )}
         </Card>
       </div>

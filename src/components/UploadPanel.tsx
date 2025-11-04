@@ -73,6 +73,17 @@ export default function UploadPanel() {
   return (
     <Card title="Upload Resume">
       <div className="flex flex-column gap-4">
+        {/* Empty State */}
+        {!uploadedFile && (
+          <div className="text-center p-4 bg-blue-50 border-round">
+            <i className="pi pi-cloud-upload text-5xl text-blue-300 mb-3"></i>
+            <p className="text-lg font-semibold m-0 mb-2">Upload your resume to get started</p>
+            <p className="text-sm text-color-secondary m-0">
+              We'll analyze your resume and provide actionable feedback
+            </p>
+          </div>
+        )}
+
         {/* File Upload Section */}
         <div>
           <FileUpload
@@ -85,6 +96,7 @@ export default function UploadPanel() {
             customUpload={false}
             onSelect={handleFileSelect}
             disabled={isAnalyzing}
+            aria-describedby="upload-help"
           />
           <small id="upload-help" className="block mt-2 text-color-secondary">
             Accepted formats: PDF, DOCX. Max size: 8 MB.
@@ -119,25 +131,36 @@ export default function UploadPanel() {
         )}
 
         {/* Section Checkboxes */}
-        <fieldset className="border-1 surface-border border-round p-3">
+        <fieldset className="border-1 surface-border border-round p-3" disabled={!uploadedFile}>
           <legend className="text-lg font-semibold px-2">Select Resume Sections</legend>
-          <div className="grid">
-            {SECTIONS.map((section) => (
-              <div key={section.name} className="col-12 md:col-6 lg:col-4">
-                <div className="flex align-items-center">
-                  <Checkbox
-                    inputId={section.name}
-                    checked={allowedSections[section.name]}
-                    onChange={() => toggleSection(section.name)}
-                    disabled={isAnalyzing}
-                  />
-                  <label htmlFor={section.name} className="ml-2 cursor-pointer">
-                    {section.label}
-                  </label>
-                </div>
+          {!uploadedFile ? (
+            <p className="text-sm text-color-secondary text-center m-0 p-3">
+              Upload a resume first to select sections
+            </p>
+          ) : (
+            <>
+              <p className="text-sm text-color-secondary m-0 mb-3">
+                Check the sections that appear in your resume:
+              </p>
+              <div className="grid">
+                {SECTIONS.map((section) => (
+                  <div key={section.name} className="col-12 md:col-6 lg:col-4">
+                    <div className="flex align-items-center">
+                      <Checkbox
+                        inputId={section.name}
+                        checked={allowedSections[section.name]}
+                        onChange={() => toggleSection(section.name)}
+                        disabled={isAnalyzing}
+                      />
+                      <label htmlFor={section.name} className="ml-2 cursor-pointer">
+                        {section.label}
+                      </label>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </>
+          )}
         </fieldset>
 
         {/* Proceed Without Sections Checkbox */}

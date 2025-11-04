@@ -28,3 +28,16 @@ main {
 .p-card {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
+
+/* Improve focus visibility for keyboard navigation */
+*:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Smooth transitions */
+.p-button,
+.p-checkbox,
+.p-chip {
+  transition: all 0.2s ease;
+}
